@@ -1,245 +1,377 @@
 <!DOCTYPE html>
 <html lang="id">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simpan Data Mahasiswa (HTML Saja)</title>
+    <title>Dashboard Data Mahasiswa</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
+        /* Modern Reset & CSS Variables */
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            padding-bottom: 60px;
+            transition: all 0.25s ease;
         }
- 
-        .judul-wrapper {
-            text-align: center;
-            padding: 20px;
-        }
- 
-        .judul-teks {
-            font-size: 24px;
-            font-family: "Courier New", Courier, monospace;
-            font-weight: bold;
-        }
- 
-        form {
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
- 
-        table {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-            width: 58%;
-        }
- 
-        td {
-            padding: 10px;
-        }
- 
-        input[type="text"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
- 
-        input[type="submit"],
-        input[type="reset"] {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 15px 32px;
+
+        /* Header Style */
+        .judul-wrapper {
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
+            margin-bottom: 40px;
         }
- 
-        input[type="reset"] {
-            background-color: #f44336;
+
+        .judul-teks {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
- 
-        .hasil-wrapper {
-            width: 58%;
-            margin: 30px auto 0 auto;
+
+        /* Main Container: Split Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            width: 100%;
+            max-width: 1100px;
         }
- 
-        .hasil-judul {
-            color: #fff;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+
+        @media (min-width: 768px) {
+            .main-container {
+                grid-template-columns: 1.2fr 1.8fr;
+            }
         }
- 
-        .kartu-mahasiswa {
-            background: rgba(255, 255, 255, 0.95);
+
+        /* Modern Glassmorphism Card Style */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Form Controls styling (Tanpa Table!) */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
             border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
-            text-align: left;
+            color: var(--text-main);
+            font-size: 0.95rem;
         }
- 
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Button Grid */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-reset {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+        }
+
+        .btn-reset:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* Right Panel: Output Hasil */
+        .hasil-judul {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge-count {
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        #daftarData {
+            display: grid;
+            gap: 15px;
+            max-height: 550px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Custom Scrollbar */
+        #daftarData::-webkit-scrollbar {
+            width: 6px;
+        }
+        #daftarData::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 10px;
+        }
+
+        /* Animasi Kartu Mahasiswa Baru */
+        .kartu-mahasiswa {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            animation: slideIn 0.3s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kartu-mahasiswa::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .kartu-mahasiswa:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(4px);
+        }
+
         .kartu-mahasiswa .nama {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
         }
- 
-        .kartu-mahasiswa .baris-info {
-            margin-top: 8px;
-            font-size: 14px;
-            color: #555;
+
+        .kartu-mahasiswa .sub-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
         }
- 
+
+        .kartu-mahasiswa .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 10px 14px;
+            border-radius: 6px;
+        }
+
         .kartu-mahasiswa .label {
-            font-weight: bold;
-            color: #333;
+            color: var(--text-muted);
+            display: block;
+            font-size: 0.75rem;
+            margin-bottom: 2px;
         }
- 
-        .kartu-mahasiswa .deskripsi {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-            font-size: 14px;
-            color: #444;
-        }
- 
+
         .kosong {
-            color: #fff;
+            color: var(--text-muted);
             text-align: center;
             font-style: italic;
+            padding: 40px 0;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
- 
+
 <body>
- 
+
     <div class="judul-wrapper">
-        <span class="judul-teks">FORM DATA MAHASISWA</span>
+        <h1 class="judul-teks">DASHBOARD MAHASISWA</h1>
     </div>
- 
-    <form id="formMahasiswa">
-        <table border="0">
-            <tr>
-                <td width="30%">Nama Lengkap</td>
-                <td><input type="text" id="nama" required></td>
-            </tr>
- 
-            <tr>
-                <td>NIM</td>
-                <td><input type="text" id="nim" required></td>
-            </tr>
- 
-            <tr>
-                <td>Prodi</td>
-                <td><input type="text" id="prodi"></td>
-            </tr>
- 
-            <tr>
-                <td>Email</td>
-                <td><input type="text" id="email" required></td>
-            </tr>
- 
-            <tr>
-                <td>Alamat</td>
-                <td><textarea id="alamat" rows="3"></textarea></td>
-            </tr>
- 
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Kirim">
-                    <input type="reset" value="Batal">
-                </td>
-            </tr>
-        </table>
-    </form>
- 
-    <div class="hasil-wrapper">
-        <div class="hasil-judul">Data Mahasiswa Tersimpan (<span id="jumlahData">0</span>)</div>
-        <div id="daftarData">
-            <p class="kosong" id="pesanKosong">Belum ada data yang disimpan.</p>
+
+    <div class="main-container">
+        <div class="glass-panel">
+            <form id="formMahasiswa">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nim">NIM</label>
+                    <input type="text" id="nim" placeholder="Masukkan NIM" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="prodi">Program Studi</label>
+                    <input type="text" id="prodi" placeholder="Contoh: Teknik Informatika">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" placeholder="nama@kampus.ac.id" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="alamat">Alamat</label>
+                    <textarea id="alamat" rows="3" placeholder="Tuliskan alamat domisili..."></textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-submit">Simpan Data</button>
+                    <button type="reset" class="btn-reset">Batal</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="glass-panel">
+            <div class="hasil-judul">
+                <span>Data Tersimpan</span>
+                <span class="badge-count" id="jumlahData">0</span>
+            </div>
+            
+            <div id="daftarData">
+                <p class="kosong" id="pesanKosong">Belum ada data mahasiswa yang dimasukkan.</p>
+            </div>
         </div>
     </div>
- 
+
     <script>
         const form = document.getElementById("formMahasiswa");
         const daftarData = document.getElementById("daftarData");
         const jumlahData = document.getElementById("jumlahData");
-        const pesanKosong = document.getElementById("pesanKosong");
- 
+
         let dataMahasiswa = [];
- 
+
         form.addEventListener("submit", function (e) {
             e.preventDefault();
- 
+
             const nama   = document.getElementById("nama").value.trim();
             const nim    = document.getElementById("nim").value.trim();
             const prodi  = document.getElementById("prodi").value.trim();
             const email  = document.getElementById("email").value.trim();
             const alamat = document.getElementById("alamat").value.trim();
- 
+
             if (nama === "" || nim === "" || email === "") {
                 alert("Nama, NIM, dan Email wajib diisi!");
                 return;
             }
- 
+
             const waktu = new Date().toLocaleString("id-ID");
- 
             dataMahasiswa.unshift({ waktu, nama, nim, prodi, email, alamat });
- 
+
             tampilkanData();
             form.reset();
         });
- 
+
         function tampilkanData() {
             jumlahData.textContent = dataMahasiswa.length;
- 
+
             if (dataMahasiswa.length === 0) {
-                daftarData.innerHTML = '<p class="kosong">Belum ada data yang disimpan.</p>';
+                daftarData.innerHTML = '<p class="kosong">Belum ada data mahasiswa yang dimasukkan.</p>';
                 return;
             }
- 
+
             daftarData.innerHTML = dataMahasiswa.map(function (d) {
                 return `
                     <div class="kartu-mahasiswa">
                         <div class="nama">${escapeHtml(d.nama)}</div>
-                        <div class="baris-info">
-                            <span class="label">NIM:</span> ${escapeHtml(d.nim)} &nbsp;|&nbsp;
-                            <span class="label">Prodi:</span> ${escapeHtml(d.prodi)}
+                        <div class="sub-info">NIM: ${escapeHtml(d.nim)} &bull; ${escapeHtml(d.prodi || 'Prodi tidak diisi')}</div>
+                        <div class="detail-grid">
+                            <div>
+                                <span class="label">Email</span>
+                                <span>${escapeHtml(d.email)}</span>
+                            </div>
+                            ${d.alamat ? `
+                            <div>
+                                <span class="label">Alamat</span>
+                                <span>${escapeHtml(d.alamat)}</span>
+                            </div>` : ""}
                         </div>
-                        <div class="baris-info">
-                            <span class="label">Email:</span> ${escapeHtml(d.email)}
-                        </div>
-                        ${d.alamat ? `<div class="deskripsi"><span class="label">Alamat:</span> ${escapeHtml(d.alamat)}</div>` : ""}
                     </div>
                 `;
             }).join("");
         }
- 
+
         function escapeHtml(teks) {
             const div = document.createElement("div");
             div.textContent = teks;
             return div.innerHTML;
         }
     </script>
- 
+
 </body>
- 
 </html>
